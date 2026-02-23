@@ -22,7 +22,8 @@ export const CATEGORY_UDP_CODES: Record<number, string> = {
 export function sendUdpSignal(categoryId: number, productName?: string): void {
   // If productName is provided, this is a product page signal
   if (productName) {
-    const message = `PRODUCT_SIGNAL_${productName.replace(/\s+/g, '_')}`;
+    // Format: CC_animation_## where ## is zero-padded product index (starting from 01)
+    const message = `CC_animation_${String(categoryId + 1).padStart(2, '0')}`;
     
     // Electron renderer — forward to main process via IPC
     if (typeof window !== 'undefined' && (window as any).require) {
