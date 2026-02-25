@@ -53,16 +53,23 @@ const COMPACT_PRODUCTS = [
   },
   {
     name: 'Hydraulic Hose - 510D - SAE 100R7 / ISO 3949-R7',
-    image: '',
+    image: './images/Hydraulic Hose - 510D.jpg',
     description:
-      'Matte cover for low coefficient of friction. Twin or multi-line available. Nylon Core tube provides\ngood chemical compatibility.',
+      'Matte cover for low coefficient of friction. Twin or multi-line available. Nylon Core tube provides good chemical compatibility.',
     udpSignal: 'CC_animation_10',
   },
   {
     name: 'Rapid Assembly Fittings',
-    image: '',
+    image: './images/Rapid Assembly Fittings.jpg',
     description:
       'With one adapter, speed up assembly installations by 50%. Simply screw in the adapter and push the tube stub fitting into the adapter.',
+    udpSignal: 'CC_animation_10',
+  },
+  {
+    name: 'Seal-Lok\u2122 O-Ring Face Seal Tube Fittings',
+    image: './images/Seal-Lok O-Ring Face Seal Fittings.jpg',
+    description:
+      "Parker's Seal-Lok O-Ring Face Seal fitting design provides leak-free connections in applications with high-pressure, vibration and impulse environments. Using the new FastSeal nut, ORFS tube connections can be made in minutes without flanging or brazing.",
     udpSignal: 'CC_animation_10',
   },
 ];
