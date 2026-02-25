@@ -8,8 +8,14 @@
 /* ===== HEADER ===== */
 .header {
   border-bottom: 0.833rem solid #ffb91d;
-  padding: 3.889rem 4.444rem;
+  padding: 5.556rem 4.444rem;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  /* Match product header: fixed portion of the screen so body text can
+     expand into the remaining header area without pushing the title. */
+  flex: 0 0 45%;
+  overflow: visible;
 }
 
 .header-title {
@@ -18,10 +24,20 @@
   color: white;
   text-align: right;
   line-height: normal;
+  margin: 0;
+  flex: 0 0 auto; /* keep the title fixed at the top of the header */
+  overflow: visible;
+  word-wrap: break-word;
 }
 
 .header-bottom {
-  margin-top: 4.444rem;
+  /* Use flex behaviour so subtitle/heading live in the remaining header
+     area and can expand without shifting the title. */
+  margin-top: 3.889rem;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
 }
 
 .header-heading {
@@ -29,7 +45,7 @@
   font-weight: 300;
   color: #ffb91d;
   line-height: 1;
-  margin-bottom: 1.111rem;
+  margin: 0 0 1.111rem 0;
 }
 
 .header-subtitle {
@@ -37,7 +53,8 @@
   font-weight: 400;
   color: white;
   line-height: 1.38;
-  margin-top: 2.778rem;
+  margin: 0; /* keep subtitle directly below heading and allow it to wrap */
+  word-wrap: break-word;
 }
 
 .header-button {
@@ -56,7 +73,9 @@
 
 /* ===== MAIN CONTENT ===== */
 .main-content {
-  padding-top: 16.667rem;
+  /* Header now occupies a fixed portion of the column; remove large
+     top padding so content naturally sits below the header. */
+  padding-top: 0;
 }
 
 .cards-row {

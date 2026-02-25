@@ -8,12 +8,15 @@
 /* ===== PRODUCT HEADER ===== */
 .product-header {
   border-bottom: 0.833rem solid #ffb91d;
-  padding: 3.889rem 4.444rem;
+  padding: 5rem 4.444rem;
   box-sizing: border-box;
   flex: 0 0 45%; /* Fixed 45% of container height */
   display: flex;
   flex-direction: column;
-  overflow-y: auto; /* Lock scrollbar to bottom */
+  /* Keep the header visible and allow the content area inside the header
+     to scroll / expand downwards without pushing the title. */
+  overflow: visible;
+  gap: 5rem;
 }
 
 .product-header-title {
@@ -23,24 +26,38 @@
   text-align: right;
   line-height: normal;
   text-transform: uppercase;
+  margin: 0;
+  flex: 0 0 auto;
+  overflow: visible;
+  word-wrap: break-word;
 }
 
 .product-header-content {
-  margin-top: 2.778rem; /* Reduced from 11.111rem for less whitespace */
+  margin-top: 3.889rem; /* give a bit more breathing room under the title */
   flex: 1;
   min-height: 0;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  overflow-y: auto;
+  justify-content: flex-end; /* align children to the bottom */
+  overflow: auto; /* allow body text to expand and scroll inside header area */
+  height: calc((5rem * 2 * 1.5) + 2.778rem + 3rem * 3 * 1.38); /* 2 lines of product-name + margin + 3 lines of description */
 }
 
 .product-name {
   font-size: 5rem;
   font-weight: 300;
   color: #ffb91d;
-  line-height: 1;
-  margin-bottom: 1.111rem;
+  line-height: 1.5;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  height: calc(5rem * 2 * 1.5); /* always reserve space for 2 lines */
+  align-self: flex-start;
+  display: flex;
+  align-items: flex-end;
 }
 
 .product-description {
@@ -52,6 +69,11 @@
   word-wrap: break-word;
   overflow-wrap: break-word;
   white-space: normal;
+  height: calc(3rem * 3 * 1.38); /* always reserve space for 3 lines */
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 
 /* ===== PRODUCT MAIN CONTENT ===== */

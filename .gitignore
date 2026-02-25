@@ -1,3 +1,4 @@
-dist
-dist_electron
-node_modules
+node_modules/
+package-lock.json
+dist_electron/
+dist/

@@ -10,50 +10,47 @@ export const CATEGORY_UDP_CODES: Record<number, string> = {
   3: 'SBW_animation_04',
 };
 
+function dispatchUdp(message: string): void {
+  if (typeof window !== 'undefined' && (window as any).require) {
+    try {
+      const { ipcRenderer } = (window as any).require('electron');
+      ipcRenderer.send('send-udp', message);
+      console.log(`[UDP] IPC → main process: "${message}"`);
+    } catch (e) {
+      console.warn('[UDP] ipcRenderer not available, logging instead:', message);
+    }
+  } else {
+    console.log(`[UDP] (dev mode) Would send "${message}" to 169.254.255.255:51680`);
+  }
+}
+
 /**
  * Send a UDP packet with the animation command string to the PixLite MK3.
  * In Electron the renderer forwards the request to the main process via IPC,
  * where Node.js `dgram` sends a broadcast UDP datagram with a CR terminator.
  * In a browser dev environment it just logs to console.
- * 
- * @param categoryId - Category ID for home page selection
- * @param productName - Product name for product page highlighting (optional)
+ *
+ * Overload 1: sendUdpSignal(signal) — send a fully-formed string directly
+ *   e.g. sendUdpSignal('CC_animation_10')
+ *
+ * Overload 2: sendUdpSignal(categoryId, productName) — generate CC_animation_##
+ *   e.g. sendUdpSignal(0, 'PHD Display')  →  'CC_animation_01'
+ *
+ * Overload 3: sendUdpSignal(categoryId) — home page category signal
+ *   e.g. sendUdpSignal(0)  →  'SBW_animation_01'
  */
-export function sendUdpSignal(categoryId: number, productName?: string): void {
-  // If productName is provided, this is a product page signal
-  if (productName) {
-    // Format: CC_animation_## where ## is zero-padded product index (starting from 01)
-    const message = `CC_animation_${String(categoryId + 1).padStart(2, '0')}`;
-    
-    // Electron renderer — forward to main process via IPC
-    if (typeof window !== 'undefined' && (window as any).require) {
-      try {
-        const { ipcRenderer } = (window as any).require('electron');
-        ipcRenderer.send('send-udp', message);
-        console.log(`[UDP] IPC → main process: "${message}"`);
-      } catch (e) {
-        console.warn('[UDP] ipcRenderer not available, logging instead:', message);
-      }
-    } else {
-      // Browser fallback — just log
-      console.log(`[UDP] (dev mode) Would send "${message}" to 169.254.255.255:51680`);
-    }
+export function sendUdpSignal(signal: string): void;
+export function sendUdpSignal(categoryId: number, productName?: string): void;
+export function sendUdpSignal(signalOrId: string | number, productName?: string): void {
+  let message: string;
+  if (typeof signalOrId === 'string') {
+    message = signalOrId;
+  } else if (productName) {
+    // Product page: generate index-based CC_animation_## signal
+    message = `CC_animation_${String(signalOrId + 1).padStart(2, '0')}`;
   } else {
-    // Otherwise, use the category-based signal for home page
-    const message = CATEGORY_UDP_CODES[categoryId] ?? `UNKNOWN_${categoryId}`;
-
-    // Electron renderer — forward to main process via IPC
-    if (typeof window !== 'undefined' && (window as any).require) {
-      try {
-        const { ipcRenderer } = (window as any).require('electron');
-        ipcRenderer.send('send-udp', message);
-        console.log(`[UDP] IPC → main process: "${message}"`);
-      } catch (e) {
-        console.warn('[UDP] ipcRenderer not available, logging instead:', message);
-      }
-    } else {
-      // Browser fallback — just log
-      console.log(`[UDP] (dev mode) Would send "${message}" to 169.254.255.255:51680`);
-    }
+    // Home page: use category code
+    message = CATEGORY_UDP_CODES[signalOrId] ?? `UNKNOWN_${signalOrId}`;
   }
+  dispatchUdp(message);
 }

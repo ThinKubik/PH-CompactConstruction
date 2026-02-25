@@ -7,6 +7,8 @@ interface Product {
   name: string;
   image: string;
   description: string;
+  /** Optional override: send this exact UDP string instead of the auto-generated CC_animation_## */
+  udpSignal?: string;
 }
 
 interface ProductPageProps {
@@ -91,7 +93,9 @@ export default function ProductPage({ categoryLabel, products }: ProductPageProp
     setCenteredIndex((prev) => {
       const newIndex = mod(prev + animOffset, products.length);
       // Send UDP signal for the new highlighted product
-      sendUdpSignal(newIndex, products[newIndex].name);
+      const p = products[newIndex];
+      if (p.udpSignal) sendUdpSignal(p.udpSignal);
+      else sendUdpSignal(newIndex, p.name);
       return newIndex;
     });
     setAnimOffset(0);
@@ -151,7 +155,11 @@ export default function ProductPage({ categoryLabel, products }: ProductPageProp
 
   // Send initial UDP signal for the default selected product on mount
   useEffect(() => {
-    sendUdpSignal(0, products[0]?.name ?? 'Unknown Product');
+    const p = products[0];
+    if (p) {
+      if (p.udpSignal) sendUdpSignal(p.udpSignal);
+      else sendUdpSignal(0, p.name);
+    }
   }, [products]);
 
   // Attach activity listeners and start idle countdown
@@ -199,14 +207,14 @@ export default function ProductPage({ categoryLabel, products }: ProductPageProp
       <ExitButton />
       {/* ===== HEADER ===== */}
       <div className="product-header bg-[#424242] flex flex-col w-full shrink-0">
-        <div className="flex items-start justify-between">
+        <div className="flex items-start justify-end">
           <p className="product-header-title">{categoryLabel}</p>
         </div>
 
-        <div className="product-header-content flex items-center w-full">
+        <div className="product-header-content flex w-full" >
           <div className="flex flex-col">
-            <p className="product-name">{selectedProduct.name}</p>
-            <p className="product-description">{selectedProduct.description}</p>
+            <p className="product-name" style={{whiteSpace: 'pre-line'}}>{selectedProduct.name}</p>
+            <p className="product-description" style={{whiteSpace: 'pre-line'}}>{selectedProduct.description}</p>
           </div>
         </div>
       </div>
