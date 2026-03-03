@@ -1,7 +1,7 @@
 {
   "name": "compact-construction",
   "private": true,
-  "version": "1.0.4",
+  "version": "1.1.0",
   "type": "module",
   "main": "electron/main.cjs",
   "scripts": {
@@ -10,7 +10,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "electron:dev": "npm run build && electron .",
-    "electron:build": "npm run build && electron-packager . \"Compact Construction\" --platform=win32 --arch=x64 --out=dist_electron --overwrite --ignore=src --ignore=node_modules --ignore=.git && powershell -Command \"Compress-Archive -Path 'dist_electron/Compact Construction-win32-x64' -DestinationPath 'dist_electron/Compact-Construction-1.0.4.zip' -Force\""
+    "electron:build": "npm run build && electron-packager . \"Compact Construction\" --platform=win32 --arch=x64 --out=dist_electron --overwrite --ignore=src --ignore=node_modules --ignore=.git && powershell -Command \"Compress-Archive -Path 'dist_electron/Compact Construction-win32-x64' -DestinationPath 'dist_electron/Compact-Construction-1.1.0.zip' -Force\""
   },
   "dependencies": {
     "react": "^19.2.0",
